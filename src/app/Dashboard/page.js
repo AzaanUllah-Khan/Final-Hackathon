@@ -18,7 +18,7 @@ const Dashboard = () => {
     const [course, setCourse] = useState('')
     const [number, setNumber] = useState('')
     const [data, setData] = useState([]);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             const q = collection(db, "User");
@@ -32,19 +32,19 @@ const Dashboard = () => {
                         } catch (error) {
                             console.log(error);
                         }
-                        
+
                         setData((prevData) => [...prevData, userData]);
                     }
                 });
             });
-            
+
             return () => unsubscribe();
         };
-        
+
         fetchData();
     }, []);
-    
-    
+
+
     const showUpdateDrawer = (userData) => {
         setSelectedUser(userData);
         setUpdateOpen(true);
@@ -85,16 +85,14 @@ const Dashboard = () => {
 
             const storageRef = ref(storage, email);
 
-            if (file) {
-                await uploadBytes(storageRef, file);
-            }
-
-            Swal.fire({
-                icon: 'success',
-                title: 'User Created Successfully.',
-            }).then(() => {
-                location.reload();
-            });
+            await uploadBytes(storageRef, file).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'User Created Successfully.',
+                }).then(() => {
+                    location.reload();
+                });
+            })
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -114,8 +112,8 @@ const Dashboard = () => {
         }).then(() => {
             Swal.fire({
                 icon: "success",
-                text:"User Updated"
-            }).then(()=>{
+                text: "User Updated"
+            }).then(() => {
                 location.reload()
             })
         })
