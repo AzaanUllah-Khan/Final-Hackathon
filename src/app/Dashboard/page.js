@@ -21,7 +21,7 @@ const Dashboard = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        if (!localStorage.getItem("adminLogged")) {
+        if (localStorage.getItem("adminLogged")=="false") {
             window.location.href = "/"
         }
         const fetchData = async () => {
