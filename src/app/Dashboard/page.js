@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword, doc, setDoc, db, auth, ref, uploadBytes
 import Swal from "sweetalert2";
 
 const Dashboard = () => {
+    const [loading, setLoading] = useState(true);
     const [selectedUser, setSelectedUser] = useState(null);
     const [open, setOpen] = useState(false);
     const [updateOpen, setUpdateOpen] = useState(false);
@@ -36,6 +37,7 @@ const Dashboard = () => {
                         setData((prevData) => [...prevData, userData]);
                     }
                 });
+                setLoading(false)
             });
 
             return () => unsubscribe();
@@ -382,6 +384,9 @@ const Dashboard = () => {
                                     ))}
                                 </tbody>
                             </table>
+                            <div>
+                        {loading && <h1 style={{textAlign:"center",padding:"10px"}}>Loading...</h1>}
+                            </div>
                         </div>
                     </div>
                 </div>
