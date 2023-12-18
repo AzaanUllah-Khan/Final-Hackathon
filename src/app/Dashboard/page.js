@@ -68,9 +68,20 @@ const Dashboard = () => {
     };
 
     function handleFileChange(e) {
-        const selectedFile = e.target.files[0];
-        setFile(selectedFile);
-    }
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        // document.getElementById("img").src = e.target.result;
+        document.getElementById("img").style.backgroundImage = `url('${e.target.result}')`
+        document.getElementById("img").style.backgroundSize = 'cover'
+    };
+
+    reader.readAsDataURL(selectedFile);
+}
+
 
     async function handleSignUp() {
         try {
@@ -209,7 +220,7 @@ const Dashboard = () => {
                     <Row gutter={16}>
                         <Col style={{ width: "100%", marginBottom: "30px" }}>
                             <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                <div style={{ position: "relative", backgroundColor: "#5c92f7", width: "110px", height: "110px", borderRadius: "50%" }}>
+                                <div id="img" style={{ position: "relative", backgroundColor: "#5c92f7", width: "110px", height: "110px", borderRadius: "50%" }}>
                                     <div style={{ position: "absolute", bottom: "0", right: "0", backgroundColor: "#D9D9D9", padding: "9px", borderRadius: "50%" }}>
                                         <label htmlFor="fileInput">
                                             <FaCamera style={{ fontSize: "15px" }} />
