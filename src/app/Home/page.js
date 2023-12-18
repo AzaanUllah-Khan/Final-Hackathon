@@ -14,6 +14,7 @@ const ContactSection = () => {
                 icon: 'success',
                 confirmButtonText: 'Next'
             }).then(() => {
+                localStorage.setItem("adminLogged")=true
                 window.location.href = "Dashboard"
             })
         }

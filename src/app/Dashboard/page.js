@@ -21,6 +21,9 @@ const Dashboard = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
+        if(localStorage.getItem("adminLogged")){
+            window.location.href = "/"
+        }
         const fetchData = async () => {
             const q = collection(db, "User");
             const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -74,7 +77,6 @@ const Dashboard = () => {
     const reader = new FileReader();
 
     reader.onload = function (e) {
-        // document.getElementById("img").src = e.target.result;
         document.getElementById("img").style.backgroundImage = `url('${e.target.result}')`
         document.getElementById("img").style.backgroundSize = 'cover'
     };
