@@ -348,12 +348,17 @@ const Dashboard = () => {
                                 </a>
                             </li>
                         </ul>
-                        <button className="bg-red-500 text-white p-2 rounded-lg ml-3" style={{ position: "absolute", bottom: "10px", width: "200px" }} onClick={() => {
-                            localStorage.setItem("adminLogged") = false
-                            window.location.href = "Home"
-                        }}>
+                        <button
+                            className="bg-red-500 text-white p-2 rounded-lg ml-3"
+                            style={{ position: "absolute", bottom: "10px", width: "200px" }}
+                            onClick={() => {
+                                localStorage.setItem("adminLogged", false);
+                                window.location.href = "Home";
+                            }}
+                        >
                             Logout
                         </button>
+
                     </div>
                 </aside>
                 <div className="p-10 w-full">
