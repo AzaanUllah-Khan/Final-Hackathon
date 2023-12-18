@@ -21,7 +21,7 @@ const Dashboard = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        if(localStorage.getItem("adminLogged")){
+        if (localStorage.getItem("adminLogged")) {
             window.location.href = "/"
         }
         const fetchData = async () => {
@@ -71,18 +71,18 @@ const Dashboard = () => {
     };
 
     function handleFileChange(e) {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
 
-    const reader = new FileReader();
+        const reader = new FileReader();
 
-    reader.onload = function (e) {
-        document.getElementById("img").style.backgroundImage = `url('${e.target.result}')`
-        document.getElementById("img").style.backgroundSize = 'cover'
-    };
+        reader.onload = function (e) {
+            document.getElementById("img").style.backgroundImage = `url('${e.target.result}')`
+            document.getElementById("img").style.backgroundSize = 'cover'
+        };
 
-    reader.readAsDataURL(selectedFile);
-}
+        reader.readAsDataURL(selectedFile);
+    }
 
 
     async function handleSignUp() {
@@ -348,7 +348,10 @@ const Dashboard = () => {
                                 </a>
                             </li>
                         </ul>
-                        <button className="bg-red-500 text-white p-2 rounded-lg ml-3" style={{ position: "absolute", bottom: "10px", width: "200px" }} onClick={() => { window.location.href = "Home" }}>
+                        <button className="bg-red-500 text-white p-2 rounded-lg ml-3" style={{ position: "absolute", bottom: "10px", width: "200px" }} onClick={() => {
+                            localStorage.setItem("adminLogged") = false
+                            window.location.href = "Home"
+                        }}>
                             Logout
                         </button>
                     </div>
@@ -398,7 +401,7 @@ const Dashboard = () => {
                                 </tbody>
                             </table>
                             <div>
-                        {loading && <h1 style={{textAlign:"center",padding:"10px"}}>Loading...</h1>}
+                                {loading && <h1 style={{ textAlign: "center", padding: "10px" }}>Loading...</h1>}
                             </div>
                         </div>
                     </div>
