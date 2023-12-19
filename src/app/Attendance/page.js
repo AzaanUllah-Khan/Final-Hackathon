@@ -37,7 +37,6 @@ const Attendance = () => {
                         >
                             Logout
                         </button>
-
                     </div>
                 </aside>
                 <div className="p-10 w-full">

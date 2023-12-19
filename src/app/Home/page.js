@@ -28,8 +28,10 @@ const ContactSection = () => {
         }
     }
     return (
-        <section className="text-gray-600 body-font relative height-auto" style={{ fontFamily: "Montserrat", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", backgroundImage: 'linear-gradient(to right, #8fabdf, #ffffff)', paddingRight: "180px", paddingLeft: "180px" }}>
-            <div className="container px-20 py-24 mx-auto" style={{ boxShadow: "0px 0px 20px rgba(0,0,0,0.15)", backgroundColor: "#fff", borderRadius: "20px" }}>
+        <section className="text-gray-600 body-font relative height-auto" style={{ fontFamily: "Montserrat", height: "100vh", display: "flex", width:"100%" }}>
+            <div style={{backgroundColor:"#8fabdf",height:"100vh",width:"50%"}}></div>
+            <div style={{backgroundColor:"fff",height:"100vh",width:"50%"}}></div>
+            <div className="container px-20 py-24 mx-auto" style={{ boxShadow: "0px 0px 20px rgba(0,0,0,0.15)", backgroundColor: "#fff", borderRadius: "30px",position:"absolute",width:"925px",top:"70px",right:0,left:0,marginLeft:"auto",marginRight:"auto" }}>
                 <div className="flex flex-col text-center w-full mb-2">
                     <h1 className="sm:text-3xl text-2xl font-medium title-font mb-10 text-gray-900" style={{ fontWeight: "bold" }}>Login</h1>
                 </div>
