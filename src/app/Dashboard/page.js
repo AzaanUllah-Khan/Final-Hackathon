@@ -417,7 +417,7 @@ const Dashboard = () => {
                                     <td className="px-4 py-3">{item.email}</td>
                                     <td className="px-4 py-3">{item.course}</td>
                                     <td className="px-4 py-3">{item.password}</td>
-                                    <td className="pl-5 px-4 py-5 flex gap-4 justify-content-center items-center"><FaEdit onClick={() => { showUpdateDrawer(item) }} /><FaTrash></FaTrash></td>
+                                    <td className="pl-5 px-4 py-5 flex gap-4 justify-content-center items-center"><FaEdit onClick={() => { showUpdateDrawer(item) }} style={{fontSize:"16px",cursor:"pointer",color:"#29839c"}}/><FaTrash style={{fontSize:"16px",cursor:"pointer",color:"#ff7070"}}></FaTrash></td>
                                 </tr>
                             ))}
                         </tbody>
