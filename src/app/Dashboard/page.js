@@ -5,6 +5,7 @@ import { FaPlus, FaCamera } from 'react-icons/fa'
 import { Drawer, Space, Button, Form, Row, Col, Input } from "antd";
 import { createUserWithEmailAndPassword, doc, setDoc, db, auth, ref, uploadBytes, storage, collection, onSnapshot, getDownloadURL, updateDoc, getAuth, onAuthStateChanged } from '../../Firebase/config'
 import Swal from "sweetalert2";
+import LoadingScreen from "../Home/loader";
 
 const Dashboard = () => {
     const [loading, setLoading] = useState(true);
@@ -21,7 +22,7 @@ const Dashboard = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        if (localStorage.getItem("adminLogged")=="false") {
+        if (localStorage.getItem("adminLogged") == "false") {
             window.location.href = "/"
         }
         const fetchData = async () => {
@@ -353,7 +354,7 @@ const Dashboard = () => {
                             style={{ position: "absolute", bottom: "10px", width: "200px" }}
                             onClick={() => {
                                 localStorage.setItem("adminLogged", false);
-                                window.location.href = "Home";
+                                window.location.href = "/";
                             }}
                         >
                             Logout
@@ -405,9 +406,11 @@ const Dashboard = () => {
                                     ))}
                                 </tbody>
                             </table>
-                            <div>
-                                {loading && <h1 style={{ textAlign: "center", padding: "10px" }}>Loading...</h1>}
-                            </div>
+                            {loading &&
+                                <div style={{ position: "relative", padding: "30px" }}>
+                                    <LoadingScreen />
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

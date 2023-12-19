@@ -32,7 +32,7 @@ const Attendance = () => {
                             style={{ position: "absolute", bottom: "10px", width: "200px" }}
                             onClick={() => {
                                 localStorage.setItem("adminLogged", false);
-                                window.location.href = "Home";
+                                window.location.href = "/";
                             }}
                         >
                             Logout
