@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import '@fontsource/montserrat'
 import { FaPlus, FaCamera, FaEdit, FaTrash } from 'react-icons/fa'
-import { Drawer, Space, Button, Form, Row, Col, Input } from "antd";
+import { Drawer, Space, Button, Form, Row, Col, Input, Spin } from "antd";
 import { createUserWithEmailAndPassword, doc, setDoc, db, auth, ref, uploadBytes, storage, collection, onSnapshot, getDownloadURL, updateDoc, getAuth, onAuthStateChanged } from '../../Firebase/config'
 import Swal from "sweetalert2";
 import LoadingScreen from "../Home/loader";
@@ -102,6 +102,8 @@ const Dashboard = () => {
 
 
     async function handleSignUp() {
+        setLoading(true);
+
         let errorMessage = "";
 
         if (!firstName) {
@@ -133,12 +135,15 @@ const Dashboard = () => {
         }
 
         if (errorMessage) {
-            // Display specific error messages
-            Swal.fire({
-                icon: 'error',
-                title: 'Validation Error',
-                text: errorMessage,
-            });
+            setTimeout(() => {
+                setLoading(false);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: errorMessage,
+                });
+            }, 1000)
+
             return;
         }
         try {
@@ -155,17 +160,20 @@ const Dashboard = () => {
 
             const storageRef = ref(storage, email);
 
-            await uploadBytes(storageRef, file).then(() => {
+            await uploadBytes(storageRef, file).then(async () => {
+                setLoading(false);
+
                 Swal.fire({
                     icon: 'success',
                     title: 'User Created Successfully.',
                 }).then(() => {
                     location.reload();
                 });
-            })
+            });
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
+            setLoading(false);
             Swal.fire({
                 icon: 'error',
                 title: errorMessage,
@@ -301,115 +309,119 @@ const Dashboard = () => {
                     </Space>
                 }
             >
-                <Form layout="vertical">
-                    <Row gutter={16}>
-                        <Col style={{ width: "100%", marginBottom: "30px" }}>
-                            <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                <div id="img" style={{ position: "relative", backgroundColor: "#5c92f7", width: "110px", height: "110px", borderRadius: "50%" }}>
-                                    <div style={{ position: "absolute", bottom: "0", right: "0", backgroundColor: "#D9D9D9", padding: "9px", borderRadius: "50%" }}>
-                                        <label htmlFor="fileInput">
-                                            <FaCamera style={{ fontSize: "15px" }} />
-                                            <Input type="file" id="fileInput" onChange={handleFileChange} style={{ display: "none" }} />
-                                        </label>
+                <Spin spinning={loading} size="large" style={{ marginTop: "20px" }}>
+                    {!loading && (
+                        <Form layout="vertical">
+                            <Row gutter={16}>
+                                <Col style={{ width: "100%", marginBottom: "30px" }}>
+                                    <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                        <div id="img" style={{ position: "relative", backgroundColor: "#5c92f7", width: "110px", height: "110px", borderRadius: "50%" }}>
+                                            <div style={{ position: "absolute", bottom: "0", right: "0", backgroundColor: "#D9D9D9", padding: "9px", borderRadius: "50%" }}>
+                                                <label htmlFor="fileInput">
+                                                    <FaCamera style={{ fontSize: "15px" }} />
+                                                    <Input type="file" id="fileInput" onChange={handleFileChange} style={{ display: "none" }} />
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="firstName"
-                                label="First Name"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please enter user name',
-                                    },
-                                ]}
-                            >
-                                <Input onChange={(e) => { setFirstName(e.target.value) }} />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="lastName"
-                                label="Last Name"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please enter user name',
-                                    },
-                                ]}
-                            >
-                                <Input onChange={(e) => { setLastName(e.target.value) }} />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="course"
-                                label="Course"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please enter the course name',
-                                    },
-                                ]}
-                            >
-                                <Input onChange={(e) => { setCourse(e.target.value) }} />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="password"
-                                label="Password"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Password is Required',
-                                    },
-                                ]}
-                            >
-                                <Input onChange={(e) => { setPassword(e.target.value) }} />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="email"
-                                label="Email"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please enter email of the student',
-                                    },
-                                ]}
-                            >
-                                <Input onChange={(e) => { setEmail(e.target.value) }} />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="number"
-                                label="Phone Number"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please the Phone Number',
-                                    },
-                                ]}
-                            >
-                                <Input onChange={(e) => { setNumber(e.target.value) }} />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item
+                                        name="firstName"
+                                        label="First Name"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please enter user name',
+                                            },
+                                        ]}
+                                    >
+                                        <Input onChange={(e) => { setFirstName(e.target.value) }} />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        name="lastName"
+                                        label="Last Name"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please enter user name',
+                                            },
+                                        ]}
+                                    >
+                                        <Input onChange={(e) => { setLastName(e.target.value) }} />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item
+                                        name="course"
+                                        label="Course"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please enter the course name',
+                                            },
+                                        ]}
+                                    >
+                                        <Input onChange={(e) => { setCourse(e.target.value) }} />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        name="password"
+                                        label="Password"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Password is Required',
+                                            },
+                                        ]}
+                                    >
+                                        <Input onChange={(e) => { setPassword(e.target.value) }} />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item
+                                        name="email"
+                                        label="Email"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please enter email of the student',
+                                            },
+                                        ]}
+                                    >
+                                        <Input onChange={(e) => { setEmail(e.target.value) }} />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        name="number"
+                                        label="Phone Number"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please the Phone Number',
+                                            },
+                                        ]}
+                                    >
+                                        <Input onChange={(e) => { setNumber(e.target.value) }} />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Form>)}
+                </Spin>
+
             </Drawer>
             {/* Drawer End */}
-            <section className="bg-gray-50 antialiased" style={{ minHeight:"100vh",fontFamily: "Montserrat", display: "flex" }}>
+            <section className="bg-gray-50 antialiased" style={{ minHeight: "100vh", fontFamily: "Montserrat", display: "flex" }}>
                 <aside id="default-sidebar" aria-label="Sidebar" style={{
                     width: "250px",
                     position: "fixed", // Set position to fixed
@@ -452,7 +464,7 @@ const Dashboard = () => {
 
                     </div>
                 </aside>
-                <div className="p-10 w-full" style={{ marginLeft: "250px"}}>
+                <div className="p-10 w-full" style={{ marginLeft: "250px" }}>
                     <div className="bg-white relative shadow-md sm:rounded-lg w-full">
                         <div className="w-full flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div className="w-full flex">
