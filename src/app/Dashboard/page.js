@@ -516,8 +516,8 @@ const Dashboard = () => {
                                 </tbody>
                             </table>
                             {loading &&
-                                <div style={{ position: "relative", padding: "30px" }}>
-                                    <LoadingScreen />
+                                <div style={{ position: "relative", padding: "30px", display:"flex" }}>
+                                    <Spin spinning={loading} size="large" style={{ margin: "0 auto" }}></Spin>
                                 </div>
                             }
                         </div>
