@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import LoadingScreen from "../Home/loader";
 
 const Dashboard = () => {
+    const [loadingE, setLoadingE] = useState(false);
     const [loading, setLoading] = useState(true);
     const [selectedUser, setSelectedUser] = useState(null);
     const [open, setOpen] = useState(false);
@@ -182,6 +183,7 @@ const Dashboard = () => {
     }
     console.log(data);
     async function handleUpdate(uid) {
+        setLoadingE(true)
         const washingtonRef = doc(db, "User", uid);
 
         if (fileE) {
@@ -200,7 +202,7 @@ const Dashboard = () => {
                 course: course,
             });
         }
-
+        setLoadingE(false)
         Swal.fire({
             icon: "success",
             text: "User Updated"
@@ -230,66 +232,69 @@ const Dashboard = () => {
                     </Space>
                 }
             >
-                <Form layout="vertical">
-                    <Row gutter={16}>
-                        <Col style={{ width: "100%", marginBottom: "30px" }}>
-                            <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                <div id="imgE" style={{ position: "relative", backgroundSize: "cover", backgroundColor: "#5c92f7", backgroundImage: `url(${selectedUser?.imageUrl})`, width: "110px", height: "110px", borderRadius: "50%" }}>
-                                    <div style={{ position: "absolute", bottom: "0", right: "0", backgroundColor: "#D9D9D9", padding: "9px", borderRadius: "50%" }}>
-                                        <label htmlFor="fileInput">
-                                            <FaCamera style={{ fontSize: "15px" }} />
-                                            <Input type="file" id="fileInput" onChange={handleFileChangeE} style={{ display: "none" }} />
-                                        </label>
+                <Spin spinning={loadingE} size="large" style={{ marginTop: "20px" }}>
+                    {!loadingE && (
+                        <Form layout="vertical">
+                            <Row gutter={16}>
+                                <Col style={{ width: "100%", marginBottom: "30px" }}>
+                                    <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                        <div id="imgE" style={{ position: "relative", backgroundSize: "cover", backgroundColor: "#5c92f7", backgroundImage: `url(${selectedUser?.imageUrl})`, width: "110px", height: "110px", borderRadius: "50%" }}>
+                                            <div style={{ position: "absolute", bottom: "0", right: "0", backgroundColor: "#D9D9D9", padding: "9px", borderRadius: "50%" }}>
+                                                <label htmlFor="fileInput">
+                                                    <FaCamera style={{ fontSize: "15px" }} />
+                                                    <Input type="file" id="fileInput" onChange={handleFileChangeE} style={{ display: "none" }} />
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={24}>
-                            <Form.Item
-                                name="firstName"
-                                label="First Name"
-                                initialValue={(selectedUser?.name)?.split(' ')[0]}
-                            >
-                                <Input onChange={(e) => { setFirstName(e.target.value) }} />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={24}>
-                            <Form.Item
-                                name="lastName"
-                                label="Last Name"
-                                initialValue={(selectedUser?.name)?.split(' ')[1]}
-                            >
-                                <Input onChange={(e) => { setLastName(e.target.value) }} />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={24}>
-                            <Form.Item
-                                name="course"
-                                label="Course"
-                                initialValue={selectedUser?.course}
-                            >
-                                <Input onChange={(e) => { setCourse(e.target.value) }} />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={24}>
-                            <Form.Item
-                                name="number"
-                                label="Phone Number"
-                                initialValue={selectedUser?.phone}
-                            >
-                                <Input onChange={(e) => { setNumber(e.target.value) }} />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={24}>
+                                    <Form.Item
+                                        name="firstName"
+                                        label="First Name"
+                                        initialValue={(selectedUser?.name)?.split(' ')[0]}
+                                    >
+                                        <Input onChange={(e) => { setFirstName(e.target.value) }} />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={24}>
+                                    <Form.Item
+                                        name="lastName"
+                                        label="Last Name"
+                                        initialValue={(selectedUser?.name)?.split(' ')[1]}
+                                    >
+                                        <Input onChange={(e) => { setLastName(e.target.value) }} />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={24}>
+                                    <Form.Item
+                                        name="course"
+                                        label="Course"
+                                        initialValue={selectedUser?.course}
+                                    >
+                                        <Input onChange={(e) => { setCourse(e.target.value) }} />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={24}>
+                                    <Form.Item
+                                        name="number"
+                                        label="Phone Number"
+                                        initialValue={selectedUser?.phone}
+                                    >
+                                        <Input onChange={(e) => { setNumber(e.target.value) }} />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Form>)}
+                </Spin>
             </Drawer >
             {/* Drawer Update End */}
             {/* Drawer Start */}
