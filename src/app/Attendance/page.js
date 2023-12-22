@@ -5,8 +5,16 @@ import '@fontsource/montserrat'
 const Attendance = () => {
     return (
         <>
-            <section className="bg-gray-50 dark:bg-gray-900 antialiased" style={{ fontFamily: "Montserrat", display: "flex", height: "100vh" }}>
-                <aside id="default-sidebar" aria-label="Sidebar" style={{ width: "300px" }}>
+            <section className="bg-gray-50 dark:bg-gray-900 antialiased" style={{ fontFamily: "Montserrat", display: "flex", minHeight: "100vh" }}>
+                <aside id="default-sidebar" aria-label="Sidebar" style={{
+                    width: "250px",
+                    position: "fixed", // Set position to fixed
+                    top: "0", // Fix it to the top
+                    bottom: "0", // Fix it to the bottom
+                    overflowY: "auto", // Add overflow for scrolling
+                    backgroundColor: "white",
+                    zIndex: "100", // Add zIndex to make sure it appears above other content
+                }}>
                     <div className="h-full px-3 py-4 overflow-y-auto w-300" style={{ backgroundColor: "white" }}>
                         <ul className="space-y-2 font-medium">
                             <li>
@@ -39,7 +47,7 @@ const Attendance = () => {
                         </button>
                     </div>
                 </aside>
-                <div className="p-10 w-full">
+                <div className="p-10 w-full" style={{marginLeft:"250px"}}>
                     <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden w-full">
                         <div className="w-full flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div className="w-full flex">

@@ -13,6 +13,7 @@ const Dashboard = () => {
     const [open, setOpen] = useState(false);
     const [updateOpen, setUpdateOpen] = useState(false);
     const [file, setFile] = useState(null);
+    const [fileE, setFileE] = useState(null);
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [firstName, setFirstName] = useState('')
@@ -74,7 +75,7 @@ const Dashboard = () => {
 
     function handleFileChangeE(e) {
         const selectedFile = e.target.files[0];
-        setFile(selectedFile);
+        setFileE(selectedFile);
 
         const reader = new FileReader();
 
@@ -101,6 +102,45 @@ const Dashboard = () => {
 
 
     async function handleSignUp() {
+        let errorMessage = "";
+
+        if (!firstName) {
+            errorMessage += "Enter first name.\n";
+        }
+
+        if (!lastName) {
+            errorMessage += "Enter last name.\n";
+        }
+
+        if (!course) {
+            errorMessage += "Enter course.\n";
+        }
+
+        if (!email) {
+            errorMessage += "Enter email.\n";
+        }
+
+        if (!password) {
+            errorMessage += "Enter password.\n";
+        }
+
+        if (!number) {
+            errorMessage += "Enter phone number.\n";
+        }
+
+        if (!file) {
+            errorMessage += "Please select an image.\n";
+        }
+
+        if (errorMessage) {
+            // Display specific error messages
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: errorMessage,
+            });
+            return;
+        }
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -135,24 +175,32 @@ const Dashboard = () => {
     console.log(data);
     async function handleUpdate(uid) {
         const washingtonRef = doc(db, "User", uid);
-        await updateDoc(washingtonRef, {
-            name: `${firstName} ${lastName}`,
-            phone: number,
-            course: course,
-        });
-        const filename = `${selectedUser?.email}`;
-        const storageRef = ref(storage, filename);
 
-        await uploadBytes(storageRef, file).then(() => {
-            Swal.fire({
-                icon: "success",
-                text: "User Updated"
-            }).then(() => {
-                location.reload();
+        if (fileE) {
+            await updateDoc(washingtonRef, {
+                name: `${firstName} ${lastName}`,
+                phone: number,
+                course: course,
             });
-        });
 
+            const storageRef = ref(storage, `${selectedUser?.email}`);
+            await uploadBytes(storageRef, fileE);
+        } else {
+            await updateDoc(washingtonRef, {
+                name: `${firstName} ${lastName}`,
+                phone: number,
+                course: course,
+            });
+        }
+
+        Swal.fire({
+            icon: "success",
+            text: "User Updated"
+        }).then(() => {
+            location.reload();
+        });
     }
+
 
 
     return (
@@ -361,8 +409,16 @@ const Dashboard = () => {
                 </Form>
             </Drawer>
             {/* Drawer End */}
-            <section className="bg-gray-50 dark:bg-gray-900 antialiased" style={{ fontFamily: "Montserrat", display: "flex", height: "100vh" }}>
-                <aside id="default-sidebar" aria-label="Sidebar" style={{ width: "300px", position: "relative" }}>
+            <section className="bg-gray-50 antialiased" style={{ minHeight:"100vh",fontFamily: "Montserrat", display: "flex" }}>
+                <aside id="default-sidebar" aria-label="Sidebar" style={{
+                    width: "250px",
+                    position: "fixed", // Set position to fixed
+                    top: "0", // Fix it to the top
+                    bottom: "0", // Fix it to the bottom
+                    overflowY: "auto", // Add overflow for scrolling
+                    backgroundColor: "white",
+                    zIndex: "100", // Add zIndex to make sure it appears above other content
+                }}>
                     <div className="h-full px-3 py-4 overflow-y-auto w-300" style={{ backgroundColor: "white" }}>
                         <ul className="space-y-2 font-medium">
                             <li>
@@ -396,8 +452,8 @@ const Dashboard = () => {
 
                     </div>
                 </aside>
-                <div className="p-10 w-full">
-                    <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden w-full">
+                <div className="p-10 w-full" style={{ marginLeft: "250px"}}>
+                    <div className="bg-white relative shadow-md sm:rounded-lg w-full">
                         <div className="w-full flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div className="w-full flex">
                                 <div className="flex items-center justify-between w-full">
